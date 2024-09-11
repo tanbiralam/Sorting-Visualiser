@@ -18,10 +18,19 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+  overflow: hidden;
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+.default-line-color {
+  background: theme("colors.system.purple50");
+}
+
+.change-line-color {
+  background: theme("colors.system.green60");
 }
