@@ -1,11 +1,13 @@
 "use client";
 
+import React from "react";
 import { Select } from "@/components/input/Select";
 import { Slider } from "@/components/input/Slider";
 import { useSortingAlgorithmContext } from "@/context/Visualizer";
 import { SortingAlgorithmType } from "@/lib/types";
-import { algorithmOptions } from "@/lib/utils";
-import React, { useEffect } from "react";
+import { algorithmOptions, generateAnimationArray } from "@/lib/utils";
+import { FaPlayCircle } from "react-icons/fa";
+import { RxReset } from "react-icons/rx";
 
 export default function Home() {
   const {
@@ -15,15 +17,28 @@ export default function Home() {
     animationSpeed,
     selectedAlgorithm,
     setSelectedAlgorithm,
+    requiresReset,
+    resetArrayAndAnimation,
+    runAnimation,
   } = useSortingAlgorithmContext();
 
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedAlgorithm(e.target.value as SortingAlgorithmType);
   };
 
-  useEffect(() => {
-    console.log("Selected Algorithm", selectedAlgorithm);
-  }, [selectedAlgorithm]);
+  const handlePlay = () => {
+    if (requiresReset) {
+      resetArrayAndAnimation();
+      return;
+    }
+  };
+
+  generateAnimationArray(
+    selectedAlgorithm,
+    isSorting,
+    arrayToSort,
+    runAnimation
+  );
 
   return (
     <main className="absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px]">
@@ -48,6 +63,16 @@ export default function Home() {
                 defaultValue={selectedAlgorithm}
                 onChange={handleSelectChange}
               />
+              <button
+                className="flex items-center justify-center"
+                onClick={handlePlay}
+              >
+                {requiresReset ? (
+                  <FaPlayCircle className="text-system-green60 h-8 w-8" />
+                ) : (
+                  <RxReset className="text-gray-400 h-8 w-8" />
+                )}
+              </button>
             </div>
           </div>
           <div className="relative h-[calc(100vh-66px)] w-full">
