@@ -6,3 +6,8 @@ export type SortingAlgorithmType =
   | "quick";
 
 export type AnimateSpeedType = "slow" | "medium" | "fast" | "lighning";
+
+export type SelectOptionsType = {
+  value: string;
+  label: string;
+};

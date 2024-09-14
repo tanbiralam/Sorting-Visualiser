@@ -1,12 +1,29 @@
 "use client";
 
+import { Select } from "@/components/input/Select";
 import { Slider } from "@/components/input/Slider";
 import { useSortingAlgorithmContext } from "@/context/Visualizer";
-import { useEffect } from "react";
+import { SortingAlgorithmType } from "@/lib/types";
+import { algorithmOptions } from "@/lib/utils";
+import React, { useEffect } from "react";
 
 export default function Home() {
-  const { arrayToSort, isSorting, setAnimationSpeed, animationSpeed } =
-    useSortingAlgorithmContext();
+  const {
+    arrayToSort,
+    isSorting,
+    setAnimationSpeed,
+    animationSpeed,
+    selectedAlgorithm,
+    setSelectedAlgorithm,
+  } = useSortingAlgorithmContext();
+
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedAlgorithm(e.target.value as SortingAlgorithmType);
+  };
+
+  useEffect(() => {
+    console.log("Selected Algorithm", selectedAlgorithm);
+  }, [selectedAlgorithm]);
 
   return (
     <main className="absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px]">
@@ -24,6 +41,12 @@ export default function Home() {
                 isDisabled={isSorting}
                 value={animationSpeed}
                 handleChange={(e) => setAnimationSpeed(Number(e.target.value))}
+              />
+              <Select
+                options={algorithmOptions}
+                isDisabled={isSorting}
+                defaultValue={selectedAlgorithm}
+                onChange={handleSelectChange}
               />
             </div>
           </div>
