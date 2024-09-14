@@ -2,26 +2,31 @@
 
 import { AnimationArrayType, SortingAlgorithmType } from "@/lib/types";
 import {
-  generateRandomNumberFromInterval,
   MAX_ANIMATION_SPEED,
+  generateRandomNumberFromInterval,
 } from "@/lib/utils";
-import { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 interface SortingAlgorithmContextType {
   arrayToSort: number[];
-  setArrayToSort: (array: number[]) => void;
   selectedAlgorithm: SortingAlgorithmType;
-  setSelectedAlgorithm: (algorithm: SortingAlgorithmType) => void;
   isSorting: boolean;
+  setSelectedAlgorithm: (algorithm: SortingAlgorithmType) => void;
   setIsSorting: (isSorting: boolean) => void;
   animationSpeed: number;
   setAnimationSpeed: (speed: number) => void;
-  isAnimationComplete: boolean;
-  setIsAnimationComplete: (isComplete: boolean) => void;
   resetArrayAndAnimation: () => void;
   runAnimation: (animations: AnimationArrayType) => void;
+  isAnimationComplete: boolean;
   requiresReset: boolean;
 }
+
 const SortingAlgorithmContext = createContext<
   SortingAlgorithmContextType | undefined
 >(undefined);
@@ -29,17 +34,16 @@ const SortingAlgorithmContext = createContext<
 export const SortingAlgorithmProvider = ({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) => {
   const [arrayToSort, setArrayToSort] = useState<number[]>([]);
   const [selectedAlgorithm, setSelectedAlgorithm] =
     useState<SortingAlgorithmType>("bubble");
   const [isSorting, setIsSorting] = useState<boolean>(false);
-  const [animationSpeed, setAnimationSpeed] =
-    useState<number>(MAX_ANIMATION_SPEED);
   const [isAnimationComplete, setIsAnimationComplete] =
     useState<boolean>(false);
-
+  const [animationSpeed, setAnimationSpeed] =
+    useState<number>(MAX_ANIMATION_SPEED);
   const requiresReset = isAnimationComplete || isSorting;
 
   useEffect(() => {
@@ -53,10 +57,9 @@ export const SortingAlgorithmProvider = ({
 
   const resetArrayAndAnimation = () => {
     const contentContainer = document.getElementById("content-container");
-
     if (!contentContainer) return;
-
     const contentContainerWidth = contentContainer.clientWidth;
+
     const tempArray: number[] = [];
     const numLines = contentContainerWidth / 8;
     const containerHeight = window.innerHeight;
@@ -66,8 +69,22 @@ export const SortingAlgorithmProvider = ({
     }
 
     setArrayToSort(tempArray);
-    setIsAnimationComplete(false);
     setIsSorting(false);
+    setIsAnimationComplete(false);
+
+    const highestId = window.setTimeout(() => {
+      for (let i = highestId; i >= 0; i--) {
+        window.clearInterval(i);
+      }
+    }, 0);
+
+    setTimeout(() => {
+      const arrLines = document.getElementsByClassName("array-line");
+      for (let i = 0; i < arrLines.length; i++) {
+        arrLines[i].classList.remove("change-line-color");
+        arrLines[i].classList.add("default-line-color");
+      }
+    }, 0);
   };
 
   const runAnimation = (animations: AnimationArrayType) => {
@@ -93,30 +110,54 @@ export const SortingAlgorithmProvider = ({
       lineIndex: number,
       newHeight: number | undefined
     ) => {
-      if (newHeight === undefined) return;
       arrLines[lineIndex].style.height = `${newHeight}px`;
     };
 
     animations.forEach((animation, index) => {
       setTimeout(() => {
-        const [values, isSwap] = animation;
-
+        const [lineIndexes, isSwap] = animation;
         if (!isSwap) {
-          updateClassList(values, "change-line-color", "default-line-color");
-          setTimeout(() => {
-            updateClassList(values, "default-line-color", "change-line-color");
-          }, inverseSpeed);
+          updateClassList(
+            lineIndexes,
+            "change-line-color",
+            "default-line-color"
+          );
+          setTimeout(
+            () =>
+              updateClassList(
+                lineIndexes,
+                "default-line-color",
+                "change-line-color"
+              ),
+            inverseSpeed
+          );
         } else {
-          const [lineIndex, newHeight] = values;
+          const [lineIndex, newHeight] = lineIndexes;
           updateHeightValue(lineIndex, newHeight);
         }
       }, index * inverseSpeed);
     });
+
+    const finalTimeout = animations.length * inverseSpeed;
+    setTimeout(() => {
+      Array.from(arrLines).forEach((line) => {
+        line.classList.add("pulse-animation", "change-line-color");
+        line.classList.remove("default-line-color");
+      });
+
+      setTimeout(() => {
+        Array.from(arrLines).forEach((line) => {
+          line.classList.remove("pulse-animation", "change-line-color");
+          line.classList.add("default-line-color");
+        });
+        setIsSorting(false);
+        setIsAnimationComplete(true);
+      }, 1000);
+    }, finalTimeout);
   };
 
   const value = {
     arrayToSort,
-    setArrayToSort,
     selectedAlgorithm,
     setSelectedAlgorithm,
     isSorting,
@@ -124,9 +165,8 @@ export const SortingAlgorithmProvider = ({
     animationSpeed,
     setAnimationSpeed,
     isAnimationComplete,
-    setIsAnimationComplete,
-    runAnimation,
     resetArrayAndAnimation,
+    runAnimation,
     requiresReset,
   };
 
@@ -137,11 +177,11 @@ export const SortingAlgorithmProvider = ({
   );
 };
 
-export const useSortingAlgorithmContext = () => {
+export const useSortingAlgorithmContext = (): SortingAlgorithmContextType => {
   const context = useContext(SortingAlgorithmContext);
-  if (!context) {
+  if (context === undefined) {
     throw new Error(
-      "useSortingAlgorithmContext must be within a SortingAlgorithmAnalyser"
+      "useSortingAlgorithmContext must be used within a SortingAlgorithmProvider"
     );
   }
   return context;

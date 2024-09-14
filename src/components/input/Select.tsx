@@ -1,4 +1,5 @@
 import { SelectOptionsType } from "@/lib/types";
+import React from "react";
 
 export const Select = ({
   options,
