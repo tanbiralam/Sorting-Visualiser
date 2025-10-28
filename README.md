@@ -1,35 +1,68 @@
+# Sorting Visualiser
+
+[Live Demo](https://sorting-visualiser-alpha-two.vercel.app)
+
+Sorting Visualiser is an interactive web application for visualizing popular sorting algorithms. Built primarily with TypeScript and leveraging modern web technologies, this tool helps users understand how different sorting techniques operate step-by-step through engaging animations.
+
+## Features
+
+- Visualizes common sorting algorithms (such as Bubble Sort, Selection Sort, etc.)
+- Interactive controls to adjust array size and sorting speed
+- Real-time animations to demonstrate sorting logic
+- Clean, responsive UI built with Tailwind CSS and Next.js
+
+## Tech Stack
+
+- **TypeScript** (96.9%)
+- **CSS** (2.2%)
+- **JavaScript** (0.9%)
+- Next.js
+- Tailwind CSS
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js (v16 or higher recommended)
+- npm or yarn
+
+### Installation
+
+```bash
+git clone https://github.com/tanbiralam/Sorting-Visualiser.git
+cd Sorting-Visualiser
+npm install
+# or
+yarn install
+```
+
+### Running Locally
 
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit [http://localhost:3000](http://localhost:3000) to view the app in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **/src**: Main source code for components, pages, and logic
+- **package.json**: Project dependencies and scripts
+- **next.config.mjs**: Next.js configuration
+- **tailwind.config.ts**: Tailwind CSS configuration
+- **tsconfig.json**: TypeScript configuration
+- **.eslintrc.json**: Linting configuration
 
-## Learn More
+## Contributing
 
-To learn more about Next.js, take a look at the following resources:
+Contributions are welcome! Please open an issue or submit a pull request for improvements or bug fixes.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## License
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+This project currently does not specify a license.
 
-## Deploy on Vercel
+## Author
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [tanbiralam](https://github.com/tanbiralam)
